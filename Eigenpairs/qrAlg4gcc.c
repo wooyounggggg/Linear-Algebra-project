@@ -6,8 +6,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
- 
+#include <math.h> 
+#define MATRIX_SIZE 3
+
 typedef struct {
 	int m, n;
 	double ** v;
@@ -215,31 +216,49 @@ void householder(mat m, mat *R, mat *Q)
 	//matrix_transpose(*R); //should be deleted
 	//puts("R in Householder2"); matrix_show(*R);
 }
-/*
-double A[][3] = {
+
+/**/
+double A[][MATRIX_SIZE] = {
 	{1, 0, 1},
 	{-1, 2, 1},
 	{-2, 0, 4}
 };//*/
 
 /*
-double A[][3] = {
+double A[][MATRIX_SIZE] = {
 	{1, 0, 1},
 	{0, 2, 1},
 	{1, 1, 4}
 };//*/
-
-//* 
-double A[][2] = {
+/*
+double A[][MATRIX_SIZE] = {
+	{2,3,2},
+	{3,4,1},
+	{2,1,5}
+};
+//*/
+/* 
+double A[][MATRIX_SIZE] = {
 	{1, 2},
 	{2, 5}
 };//*/
-
+void printMatrix(double A[][MATRIX_SIZE], double error){
+	int i;
+	int j;
+	printf("for matrix %d x %d, with error < %lf\n\n", MATRIX_SIZE, MATRIX_SIZE, error);
+	for(i = 0; i < MATRIX_SIZE; i++){	
+		for(j=0;j < MATRIX_SIZE; j++)
+			printf("%.0f ", A[i][j]);
+		printf("\n\n");
+	}
+}
 int main()
 {
-	int n = 2; 
+	int n = MATRIX_SIZE; 
 	int i;
 	int MaxIter = 100;
+	double error = 0.000001;
+	printMatrix(A, error);
 	mat R, Q;
 	mat T1 = matrix_copy(n, A, n);
 	mat T2;
@@ -257,7 +276,7 @@ int main()
 		U = matrix_mul(U,Q);
 		
 		// termination criterion
-		if (matrix_norm1(T1,T2) < 0.00000001)
+		if (matrix_norm1(T1,T2) < error)
 			break;
 
 		// T1 = T2;
